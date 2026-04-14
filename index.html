@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ky">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Бассейн Контроль</title>
+    <link rel="stylesheet" href="./css/style.css">
+    <script src="./js/script.js"></script>
+</head>
+<body style="background-color: black;">
+    <div class="container">
+        <h2>🏊 Бассейн Башкаруу</h2>
+        
+        <div class="stats">
+            <div class="btn-group">
+                <button onclick="showTotal('today')" class="income-btn">Бүгүн</button>
+                <button onclick="showTotal('week')" class="income-btn">Апта</button>
+                <button onclick="showTotal('month')" class="income-btn">Ай</button>
+            </div>
+            <div id="result-box">
+                Сумма: <span id="total-amount">0</span> сом
+            </div>
+        </div>
+
+        <div class="input-section">
+            <input type="text" id="userName" placeholder="Аты-жөнү...">
+            <div class="row-inputs">
+                <input type="number" id="hours" placeholder="Саат" min="1">
+                <input type="number" id="peopleCount" placeholder="Киши саны" min="1" value="1">
+            </div>
+            
+            <div class="add-buttons">
+                <button onclick="addUser('adult')" class="add-btn adult-btn">Чоң киши (300с)</button>
+                <button onclick="addUser('child')" class="add-btn child-btn">Жаш бала (200с)</button>
+            </div>
+        </div>
+
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Аты / Саны</th>
+                        <th>Убакыт</th>
+                        <th>Төлөм</th>
+                        <th>Статус</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody"></tbody>
+            </table>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

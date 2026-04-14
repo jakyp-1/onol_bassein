@@ -1,0 +1,74 @@
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f0f4f8;
+    margin: 0;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+}
+
+.container {
+    width: 100%;
+    max-width: 500px;
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+h2 { text-align: center; color: #007bff; }
+
+.stats {
+    background: #e9ecef;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.btn-group { display: flex; gap: 5px; margin-bottom: 10px; }
+
+.income-btn {
+    flex: 1;
+    font-size: 12px;
+    padding: 10px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    background: #6c757d;
+    color: white;
+}
+
+#result-box { text-align: center; font-weight: bold; font-size: 18px; color: #28a745; }
+
+.input-section { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+
+.row-inputs { display: flex; gap: 10px; }
+.row-inputs input { flex: 1; }
+
+input {
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+.add-buttons { display: flex; gap: 10px; }
+.add-btn {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.adult-btn { background-color: #007bff; }
+.child-btn { background-color: #fd7e14; }
+
+.table-wrapper { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; }
+th, td { padding: 10px; text-align: left; border-bottom: 1px solid #eee; font-size: 14px; }
+
+.over { background-color: #ffe5e5; }
+.delete-btn { color: #dc3545; font-size: 18px; border: none; background: none; cursor: pointer; }

@@ -1,0 +1,78 @@
+/* --- МОБИЛДИК ТҮЗҮЛҮШТӨР ҮЧҮН (Смартфондор) --- */
+@media screen and (max-width: 600px) {
+    body {
+        padding: 5px; /* Экрандын четтериндеги боштукту азайтуу */
+        background-color: #fff; /* Телефондо таза ак түс жакшы көрүнөт */
+    }
+
+    .container {
+        padding: 10px;
+        box-shadow: none; /* Телефондо көлөкөнүн кереги жок */
+        border-radius: 0;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+        margin-bottom: 15px;
+    }
+
+    /* Инпуттарды жана баскычты толук экранга жаюу */
+    .input-group {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    input {
+        width: 100%;
+        height: 50px; /* Бармак менен басууга ыңгайлуу бийиктик */
+        font-size: 18px !important; /* Телефондо фокуска түшкөндө экран чоңоюп кетпеши үчүн */
+        box-sizing: border-box;
+    }
+
+    button {
+        width: 100%;
+        height: 55px;
+        font-size: 18px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    /* ТАБЛИЦАНЫ ТЕЛЕФОНГО ЫЛАЙЫКТОО */
+    table {
+        display: block;
+        overflow-x: auto; /* Эгер батпай калса, капталга жылдыруу (scroll) */
+        white-space: nowrap;
+    }
+
+    th, td {
+        padding: 10px 5px;
+        font-size: 13px; /* Текстти бир аз кичирейтүү */
+    }
+
+    /* Статистика бөлүмү (Киреше) */
+    .stats {
+        font-size: 1.2rem;
+        padding: 15px;
+        border: 2px solid #1a73e8;
+    }
+
+    /* Өчүрүү (🗑️) баскычын чоңойтуу */
+    td button {
+        padding: 10px;
+        background-color: #f8f9fa;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+    }
+}
+
+/* --- ПЛАНШЕТТЕР ҮЧҮН --- */
+@media screen and (min-width: 601px) and (max-width: 1024px) {
+    .container {
+        max-width: 90%;
+    }
+    
+    input, button {
+        font-size: 16px;
+    }
+}
