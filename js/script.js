@@ -4,35 +4,41 @@ if (!sessionStorage.getItem("pool_auth")) {
     if (pass === "777") {
         sessionStorage.setItem("pool_auth", "true");
     } else {
-        document.body.innerHTML = "<h2 style='text-align:center; margin-top:50px;'>Кирүүгө тыюу салынган!</h2>";
+        document.body.innerHTML = "<h2>Кирүүгө тыюу салынган!</h2>";
     }
 }
 
-let users = JSON.parse(localStorage.getItem('poolData')) || [];
+// БУЛ ЖЕРГЕ FIREBASE ШИЛТЕМЕСИН КОЮҢУЗ (мисалы: https://test-db.firebaseio.com/pool.json)
+const DB_URL = "https://onol-bassein-default-rtdb.firebaseio.com/data.json";
 
-// Билдирүүлөрдү иштетүү
-function requestNotif() {
-    Notification.requestPermission().then(perm => {
-        if (perm === "granted") {
-            document.getElementById('notif-banner').style.display = 'none';
-        }
+let users = [];
+
+// БАЗАДАН МААЛЫМАТ АЛУУ
+async function fetchData() {
+    try {
+        const response = await fetch(DB_URL);
+        const data = await response.json();
+        users = data ? Object.values(data) : [];
+        renderTable();
+    } catch (e) { console.log("Ката:", e); }
+}
+
+// БАЗАГА ЖАЗУУ
+async function updateDB() {
+    await fetch(DB_URL, {
+        method: 'PUT',
+        body: JSON.stringify(users)
     });
 }
 
-if (Notification.permission !== "granted") {
-    document.getElementById('notif-banner').style.display = 'flex';
-}
-
-function addUser(type) {
-    const name = document.getElementById('userName').value.trim();
+async function addUser(type) {
+    const name = document.getElementById('userName').value;
     const hours = parseFloat(document.getElementById('hours').value);
     const count = parseInt(document.getElementById('peopleCount').value) || 1;
 
-    if (!name || isNaN(hours)) return alert("Маалыматтарды толук жазыңыз!");
+    if (!name || !hours) return alert("Толтуруңуз!");
 
     const now = new Date();
-    const price = (type === 'adult' ? 300 : 200) * hours * count;
-    
     const newUser = {
         id: Date.now(),
         name: name,
@@ -41,19 +47,17 @@ function addUser(type) {
         start: now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         end: now.getTime() + (hours * 3600000),
         endTimeStr: new Date(now.getTime() + (hours * 3600000)).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        price: price,
+        price: (type === 'adult' ? 300 : 200) * hours * count,
         date: now.toISOString().split('T')[0],
         notified: false
     };
 
     users.push(newUser);
-    saveData();
-    renderTable();
-    
-    // Форманы тазалоо
+    await updateDB();
+    fetchData(); // Баарынан көрүнүшү үчүн кайра жаңылайбыз
+
     document.getElementById('userName').value = "";
     document.getElementById('hours').value = "";
-    document.getElementById('peopleCount').value = "1";
 }
 
 function renderTable() {
@@ -63,74 +67,26 @@ function renderTable() {
 
     users.forEach(u => {
         const isOver = now > u.end;
-        
-        // Билдирүү жиберүү
-        if (isOver && !u.notified) {
-            if (Notification.permission === "granted") {
-                new Notification("Убакыт бүттү!", { body: `${u.name} тобунун убактысы бүттү.` });
-            }
-            u.notified = true;
-            saveData();
-        }
-
         const row = document.createElement('tr');
         if (isOver) row.classList.add('over');
         row.innerHTML = `
-            <td><b>${u.name}</b><br><small>${u.people} киши (${u.type})</small></td>
+            <td><b>${u.name}</b><br><small>${u.people} киши</small></td>
             <td>${u.start} - ${u.endTimeStr}</td>
             <td>${u.price}с</td>
-            <td>
-                <span>${isOver ? '🛑' : '✅'}</span>
-                <button onclick="deleteUser(${u.id})" class="delete-btn">🗑️</button>
-            </td>
+            <td>${isOver ? '🛑' : '✅'} <button onclick="deleteUser(${u.id})">🗑️</button></td>
         `;
         tbody.appendChild(row);
     });
 }
 
-function viewHistory() {
-    const date = document.getElementById('historyDate').value;
-    const box = document.getElementById('archive-result');
-    if (!date) return;
-
-    const filtered = users.filter(u => u.date === date);
-    let sum = 0;
-    let html = `<b>Архив (${date}):</b><br>`;
-    
-    if (filtered.length === 0) {
-        html += "Маалымат жок.";
-    } else {
-        filtered.forEach(u => {
-            sum += u.price;
-            html += `• ${u.name}: ${u.price}с<br>`;
-        });
-        html += `<b>Жалпы: ${sum} сом</b>`;
-    }
-    box.innerHTML = html;
-}
-
-function showTotal(period) {
-    const now = new Date();
-    const today = now.toISOString().split('T')[0];
-    let sum = 0;
-
-    users.forEach(u => {
-        if (period === 'today' && u.date === today) sum += u.price;
-        else if (period === 'month' && u.date.startsWith(today.substring(0, 7))) sum += u.price;
-        else if (period === 'week' && (Date.now() - u.id < 604800000)) sum += u.price;
-    });
-    document.getElementById('total-amount').innerText = sum;
-}
-
-function deleteUser(id) {
-    if (confirm("Өчүрүлсүнбү?")) {
+async function deleteUser(id) {
+    if(confirm("Өчүрүлсүнбү?")){
         users = users.filter(u => u.id !== id);
-        saveData();
-        renderTable();
+        await updateDB();
+        fetchData();
     }
 }
 
-function saveData() { localStorage.setItem('poolData', JSON.stringify(users)); }
-
-setInterval(renderTable, 30000); // 30 секунд сайын текшерет
-renderTable();
+// Ар 10 секундда базаны текшерип турат (башка адам кошсо дароо чыгыш үчүн)
+setInterval(fetchData, 10000);
+fetchData();
