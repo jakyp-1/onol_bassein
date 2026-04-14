@@ -3,14 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Бассейн Контроль</title>
-    <link rel="stylesheet" href="./css/style.css">
-    <script src="./js/script.js"></script>
+    <title>Pool Control Pro</title>
+   <link rel="stylesheet" href="./css/style.css">
+   <link rel="stylesheet" href="./css/media.css">
 </head>
-<body style="background-color: black;">
+<body>
     <div class="container">
         <h2>🏊 Бассейн Башкаруу</h2>
+
+        <div id="notif-banner" class="banner" style="display:none;">
+            <span>Билдирүүлөрдү иштетиңиз:</span>
+            <button onclick="requestNotif()">Уруксат берүү</button>
+        </div>
         
+        <div class="archive-section">
+            <label>📅 Күндү тандап архивди көрүү:</label>
+            <input type="date" id="historyDate" onchange="viewHistory()">
+            <div id="archive-result" class="archive-box"></div>
+        </div>
+
         <div class="stats">
             <div class="btn-group">
                 <button onclick="showTotal('today')" class="income-btn">Бүгүн</button>
@@ -18,7 +29,7 @@
                 <button onclick="showTotal('month')" class="income-btn">Ай</button>
             </div>
             <div id="result-box">
-                Сумма: <span id="total-amount">0</span> сом
+                Жалпы: <span id="total-amount">0</span> сом
             </div>
         </div>
 
@@ -26,20 +37,20 @@
             <input type="text" id="userName" placeholder="Аты-жөнү...">
             <div class="row-inputs">
                 <input type="number" id="hours" placeholder="Саат" min="1">
-                <input type="number" id="peopleCount" placeholder="Киши саны" min="1" value="1">
+                <input type="number" id="peopleCount" placeholder="Киши" min="1" value="1">
             </div>
-            
             <div class="add-buttons">
-                <button onclick="addUser('adult')" class="add-btn adult-btn">Чоң киши (300с)</button>
-                <button onclick="addUser('child')" class="add-btn child-btn">Жаш бала (200с)</button>
+                <button onclick="addUser('adult')" class="add-btn adult-btn">Чоң (300с)</button>
+                <button onclick="addUser('child')" class="add-btn child-btn">Бала (200с)</button>
             </div>
         </div>
 
+        <h3>Учурдагы тизме:</h3>
         <div class="table-wrapper">
             <table>
                 <thead>
                     <tr>
-                        <th>Аты / Саны</th>
+                        <th>Клиент</th>
                         <th>Убакыт</th>
                         <th>Төлөм</th>
                         <th>Статус</th>
@@ -49,6 +60,6 @@
             </table>
         </div>
     </div>
-    <script src="script.js"></script>
+    <script src="./js/script.js"></script>
 </body>
 </html>
